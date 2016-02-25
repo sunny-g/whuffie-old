@@ -1,14 +1,14 @@
 var DDPClient = require('ddp-client');
 
 var DDP = function(params) {
-  this.ddpClient = new DDPClient(params);
-  this.collections = this.ddpClient.collections;
+  this.ddp = new DDPClient(params);
+  this.collections = this.ddp.collections;
 };
 
 DDP.prototype.initialize = function() {
   var self = this;
   return new Promise(function(resolve, reject) {
-    self.ddpClient.connect(function(error, wasReconnect) {
+    self.ddp.connect(function(error, wasReconnect) {
       // If autoReconnect is true, this back will be invoked each time
       // a server connection is re-established
       if (error) {
@@ -28,7 +28,7 @@ DDP.prototype.initialize = function() {
 
 // Method to close the ddp connection
 DDP.prototype.close = function() {
-  return this.ddpClient.close();
+  return this.ddp.close();
 };
 
 // Promise-based subscription
@@ -39,7 +39,7 @@ DDP.prototype.subscribe = function(pubName, params) {
     console.warn('Params must be passed as an array to DDP.subscribe');
   }
   return new Promise(function(resolve) {
-    self.ddpClient.subscribe(pubName, params, function() {
+    self.ddp.subscribe(pubName, params, function() {
       resolve(true);
     });
   })
@@ -54,8 +54,9 @@ DDP.prototype.call = function(methodName, params) {
   }
 
   return new Promise(function(resolve, reject) {
-    self.ddpClient.call(methodName, params,
-      function (err, result) {   // callback which returns the method call results
+    self.ddp.call(methodName, params,
+      function (err, result) {
+        // callback which returns the method call results
         // console.log('called function, result: ' + result);
         if (err) {
           reject(err);
@@ -66,7 +67,7 @@ DDP.prototype.call = function(methodName, params) {
       function () {
         // callback which fires when server has finished
         // console.log('updated');  // sending any updated documents as a result of
-        // console.log(ddpclient.collections.posts);  // calling this method
+        // console.log(self.collections.posts);  // calling this method
       }
     );
   });

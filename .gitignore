@@ -11,8 +11,11 @@ settings.json
 .DS_Store
 Icon?
 Thumbs.db
+*.swp
 
 # other #
 #########
 .idea/
 projectFilesBackup/
+whuffie.sublime-project
+whuffie.sublime-workspace

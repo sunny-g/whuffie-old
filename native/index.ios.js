@@ -1,9 +1,10 @@
 'use strict';
 
-var React = require('react-native');
-//var ReactMotion = require('react-motion/native');
+const React = require('react-native');
+//require('./app/config/polyfills.js');
+//require('./app/config/process.polyfill.js');
 
-var {
+const {
   AppRegistry,
   StyleSheet,
   Text,
@@ -12,27 +13,54 @@ var {
   TouchableOpacity
 } = React;
 
+//let AnyDb = require('any-db-client');
+
+//var ReactMotion = require('react-motion/native');
 //var {
 //  Motion,
 //  spring
 //} = ReactMotion;
 
-var ddp = require('./app/config/ddp');
-var WhuffieIdentity = require('./app/components/identity');
+let whuffie = require('./app/config/whuffie.js');
+window.whuffie = whuffie;
+
+// var WhuffieIdentity = require('./app/components/identity');
 //var ShaderDemo = require('./app/components/glDemo');
 
-var whuffie = React.createClass({
-  componentDidMount: function() {
-    ddp.initialize()
-      .then(function(success) {
-        console.log('success initializing ddp connection', success);
-      })
-      .catch(function(err) {
-        console.log('error initializing ddp connection', err);
-      });
-  },
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      connected: false,
+      whuffie: whuffie
+    };
+  }
 
-  render: function() {
+  componentDidMount() {
+    (async () => {
+      try {
+        await whuffie.connect();
+        this.setState({
+          connected: true
+        });
+      } catch (err) {
+        console.log('error in connecting', err);
+      }
+    })();
+  }
+
+  clickHandler(e) {
+    (async () => {
+      try {
+        var something = await whuffie.auth.createNewUser('sunnyg' + Math.random() * 1000, 'helperpass', {});
+        console.log('something from creating user', something);
+      } catch (err) {
+        console.log('error creating user');
+      }
+    })();
+  }
+
+  render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
@@ -44,13 +72,18 @@ var whuffie = React.createClass({
         </Text>
 
         {/* <ShaderDemo width={100} height={100} shader={'color'}/> */}
-        <WhuffieIdentity />
+        {/* <WhuffieIdentity /> */}
+        <TouchableOpacity onPress={this.clickHandler.bind(this)}>
+          <Text>
+            button
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
-});
+}
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -69,4 +102,4 @@ var styles = StyleSheet.create({
   }
 });
 
-AppRegistry.registerComponent('whuffie', () => whuffie);
+AppRegistry.registerComponent('whuffie', () => App);

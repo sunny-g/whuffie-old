@@ -67,7 +67,6 @@ UserSchema = new SimpleSchema({
     label: 'Stellar Profile',
     optional: false
   }
-
 });
 
-Meteor.users.attachSchema(UserSchema);
+//Meteor.users.attachSchema(UserSchema);

@@ -7,7 +7,7 @@ var {
   TouchableOpacity
 } = React;
 
-//var Github = require('whuffie-identity');
+var Github = require('whuffie-identity');
 
 var WhuffieIdentity = React.createClass({
   auth: function() {

@@ -10,24 +10,8 @@
 
 autopublish
 insecure
-materialize:materialize
 less
-iron:router
 accounts-password
-meteorhacks:npm
-cosmos:browserify
-nooitaf:colors
-okgrow:promise
-
-# whuffie:whuffie-core 		# requires users, identity, etc
-whuffie:whuffie-users
-whuffie:whuffie-identity
-# sunnyg:meteor-stellar
-
-
-
-
-npm-container
 standard-minifiers
 meteor-base
 mobile-experience
@@ -42,3 +26,14 @@ random
 ejson
 spacebars
 check
+promise
+
+npm-container
+
+iron:router
+meteorhacks:npm
+cosmos:browserify
+nooitaf:colors
+
+whuffie:whuffie-users
+whuffie:whuffie-identity

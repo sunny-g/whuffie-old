@@ -1,6 +1,19 @@
-var request = Meteor.npmRequire('request');
+Meteor.methods({
+  createNewUser: function(opts) {
+    console.log('input params:', opts);
 
-Accounts.onCreateUser(testnetRegistrationHook);
+    var id = Accounts.createUser(opts);
+    // TODO: set Meteor.server.sessions[this session].userId to id
+
+    console.log('id:', id);
+
+    var user = Meteor.users.find({_id: id}).fetch()[0];
+    console.log('user:', user);
+    return user;
+  }
+});
+
+//Accounts.onCreateUser(testnetRegistrationHook);
 
 /*
  This function will:
@@ -17,19 +30,21 @@ Accounts.onCreateUser(testnetRegistrationHook);
  memo in a transaction sent immediately on signup.
  */
 
-// TODO: Meteor.wrapAsync?
-var postSync = Async.wrap(request.post);
-var getSync = Async.wrap(request.get);
-
 function getTestStellar(stellarAccount) {
-  return getFreeStellar ? getSync({url: 'https://api-stg.stellar.org/friendbot?address=' + stellarAccount.account_id}) : null;
+  if (getFreeStellar) {
+    return HTTP.get('https://api-stg.stellar.org/friendbot?address=' + stellarAccount.account_id);
+  } else {
+    return null;
+  }
 }
 
 function testnetRegistrationHook(options, user) {
   console.log('running registration hook');
 
   // have stellard create us a wallet full of stellar keys and seeds
-  var res = postSync({url: 'https://test.stellar.org:9002', form: JSON.stringify({"method": "create_keys"})});
+  //var res = HTTP.post('https://api-stg.stellar.org/friendbot?address=' + stellarAccount.account_id, {
+  //  data: {'method': 'create_keys'}
+  //});
 
   var stellarAccount = JSON.parse(res.body).result;
   delete stellarAccount.status;

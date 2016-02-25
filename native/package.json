@@ -1,14 +1,25 @@
 {
   "name": "whuffie",
   "version": "0.0.1",
-  "private": true,
   "scripts": {
-    "start": "node_modules/react-native/packager/packager.sh"
+    "start": "node_modules/react-native/packager/packager.sh",
+    "test": "jest"
   },
   "dependencies": {
-    "react-native": "^0.11.0",
-
-    "ddp": "file:../common/ddp",
-    "whuffie-identity": "file:../common/whuffie-identity"
+    "react-native": "^0.15.0-rc",
+    "whuffie-lib": "file:./node_modules/whuffie-lib"
+  },
+  "jest": {
+    "scriptPreprocessor": "node_modules/react-native/jestSupport/scriptPreprocess.js",
+    "setupEnvScriptFile": "node_modules/react-native/jestSupport/env.js",
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testFileExtensions": [
+      "js"
+    ],
+    "unmockedModulePathPatterns": [
+      "source-map"
+    ]
   }
 }
